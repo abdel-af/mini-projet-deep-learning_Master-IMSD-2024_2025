@@ -1,0 +1,48 @@
+Instructions détaillées pour l'installation et l'exécution:
+
+1. PRÉREQUIS SYSTÈME
+   - Python 3.8 ou version ultérieure
+   - pip (gestionnaire de paquets Python)
+   - Pour l'accélération GPU (optionnel mais recommandé):
+     * Carte NVIDIA avec architecture CUDA compatible
+     * Pilotes NVIDIA récents
+     * CUDA Toolkit 11.7 ou 11.8
+
+2. CRÉATION D'UN ENVIRONNEMENT VIRTUEL (recommandé)
+   # Sur Windows:
+   python -m venv pruning_env
+   pruning_env\Scripts\activate
+   
+   # Sur Linux/Mac:
+   python3 -m venv pruning_env
+   source pruning_env/bin/activate
+
+3. INSTALLATION DES DÉPENDANCES
+   pip install -r requirements.txt
+   
+   Alternative pour l'installation avec support GPU:
+   pip install torch==2.0.1+cu117 torchvision==0.15.2+cu117 --index-url https://download.pytorch.org/whl/cu117
+   pip install numpy==1.24.3 matplotlib==3.7.1 tqdm==4.65.0 pillow==9.5.0
+
+4. TÉLÉCHARGEMENT DU CODE
+   - Sauvegardez le code Python dans un fichier nommé "pruning_example.py"
+   - Sauvegardez les fichiers requirements.txt et how_to_install.txt dans le même dossier
+
+5. EXÉCUTION DU PROGRAMME
+   python pruning_example.py
+
+6. ATTENDU EN SORTIE
+   Le programme affichera:
+   - La progression de l'entraînement initial
+   - Le pourcentage de précision à chaque époque
+   - Le taux d'éparsité après élagage
+   - Les résultats après le fine-tuning
+
+7. DÉSACTIVATION DE L'ENVIRONNEMENT VIRTUEL
+   # Après utilisation:
+   deactivate
+
+NOTES:
+- Le premier lancement peut prendre plus de temps car il téléchargera le dataset MNIST
+- Sans GPU, l'entraînement sera significativement plus lent
+- L'élagage réduit la taille du modèle et accélère l'inférence

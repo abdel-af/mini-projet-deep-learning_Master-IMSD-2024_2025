@@ -1,0 +1,255 @@
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\title{Pruning Deep Neural Networks from a Sparsity Perspective}
+\subtitle{Présentation basée sur l’article (ICLR 2023)\\ Faculté Polydisciplinaire de Ouarzazate}
+\author{I.El-khayrany \\ A.ElGhefiri \\ A.Aamouch }
+\date{\today}
+\titlegraphic{\includegraphics[width=4cm]{logo.png}}
+\begin{document}
+
+\frame{\titlepage}
+
+% --- Introduction ---
+\begin{frame}{Contexte}
+\begin{itemize}
+\item Explosion de la taille des modèles
+\item Exemple : LeNet-5 (60k params) vs GPT-3 (175B params)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problème}
+\begin{itemize}
+\item Déploiement limité sur appareils contraints (mobile, assistants)
+\item Besoin de compression
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Méthodes existantes}
+\begin{itemize}
+\item Pruning
+\item Knowledge distillation
+\item Low-rank factorization
+\item Quantization
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Limites actuelles}
+\begin{itemize}
+\item Pas de mesure fiable de compressibilité
+\item Risque de sous-pruning ou sur-pruning
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Objectifs}
+\begin{itemize}
+\item Proposer une nouvelle mesure : PQ Index (PQI)
+\item Relier sparsity $\leftrightarrow$ performance
+\item Développer SAP (pruning adaptatif)
+\end{itemize}
+\end{frame}
+
+% --- Contributions ---
+\begin{frame}{Contributions principales}
+\begin{enumerate}
+\item PQ Index (PQI)
+\item Hypothèse sparsity-performance
+\item Algorithme SAP
+\item Validation expérimentale
+\end{enumerate}
+\end{frame}
+
+% --- PQ Index ---
+\begin{frame}{PQ Index (PQI)}
+\begin{itemize}
+\item Mesure de la sparsité basée sur norme $p$ et $q$
+\item $0 < p \leq 1 < q$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PQI – Définition}
+Formule : 
+\[ I_{p,q}(w) = 1 - d^{1/q - 1/p} \frac{\|w\|_p}{\|w\|_q} \]
+\end{frame}
+
+\begin{frame}{PQI – Exemple}
+\begin{itemize}
+\item Vecteur uniforme $\rightarrow$ PQI = 0
+\item Vecteur concentré $\rightarrow$ PQI proche de 1
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Propriétés idéales}
+\begin{itemize}
+\item Robin Hood
+\item Scaling
+\item Rising Tide
+\item Cloning
+\item Bill Gates
+\item Babies
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Comparaison}
+\begin{itemize}
+\item PQI satisfait toutes les propriétés
+\item Seul l’indice de Gini en fait autant
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PQI et compressibilité}
+\begin{itemize}
+\item PQI élevé $\rightarrow$ modèle compressible
+\item PQI faible $\rightarrow$ peu compressible
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamique PQI}
+\begin{itemize}
+\item Variation de PQI lors du pruning
+\item Indicateur de régularisation et collapse
+\end{itemize}
+\end{frame}
+
+% --- Hypothèse ---
+\begin{frame}{Hypothèse sparsity-performance}
+\begin{enumerate}
+\item Étape 1 : pruning régularise (perf $\uparrow$)
+\item Étape 2 : sous-apprentissage
+\item Étape 3 : collapse (perf $\downarrow$)
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Étape 1}
+Suppression paramètres redondants $\rightarrow$ meilleure généralisation.
+\end{frame}
+
+\begin{frame}{Étape 2}
+Compression excessive $\rightarrow$ perte de capacité $\rightarrow$ underfitting.
+\end{frame}
+
+\begin{frame}{Étape 3}
+Collapse : destruction de la structure $\rightarrow$ effondrement du modèle.
+\end{frame}
+
+\begin{frame}{Illustration}
+Graphique : performance vs sparsity (courbe en cloche inversée).
+\end{frame}
+
+\begin{frame}{Conséquences}
+Choisir le bon taux de pruning pour éviter sous- ou sur-pruning.
+\end{frame}
+
+% --- SAP ---
+\begin{frame}{Algorithme SAP}
+\begin{itemize}
+\item Sparsity-informed Adaptive Pruning
+\item Utilise PQI pour ajuster taux de pruning
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Différences avec One-Shot}
+One-Shot : pruning fixe, pas de ré-entraînement adaptatif.
+\end{frame}
+
+\begin{frame}{Différences avec Lottery Ticket}
+Lottery Ticket : pruning + réentraînement, mais taux fixe.
+\end{frame}
+
+\begin{frame}{Étapes SAP}
+\begin{enumerate}
+\item Init params
+\item Entraînement
+\item Calcul PQI
+\item Ajustement taux pruning
+\item Répétition
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Hyperparamètres}
+\begin{itemize}
+\item $\gamma$ (scaling)
+\item $\beta$ (max pruning ratio)
+\item $\eta_r$ (facteur de compression)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PQI-Bound}
+Formule mathématique pour borne inférieure du ratio à conserver.
+\end{frame}
+
+\begin{frame}{Pseudo-code SAP}
+Algorithme détaillé (voir article).
+\end{frame}
+
+\begin{frame}{Avantages SAP}
+\begin{itemize}
+\item Adaptatif
+\item Efficace
+\item Robuste
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Limites SAP}
+\begin{itemize}
+\item Approche statique à chaque itération
+\item Dépendance aux hyperparamètres
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Perspectives SAP}
+\begin{itemize}
+\item Intégrer dynamique de sparsity
+\item Comparer avec pruning progressif
+\end{itemize}
+\end{frame}
+
+% --- Expérimentations ---
+\begin{frame}{Expérimentations}
+\begin{itemize}
+\item Jeux de données : FashionMNIST, CIFAR10/100, TinyImageNet
+\item Modèles : MLP, CNN, ResNet, WideResNet
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Résultats CIFAR10}
+SAP $>$ Lottery Ticket $>$ One-Shot
+\end{frame}
+
+\begin{frame}{Résultats CIFAR100}
+SAP plus agressif mais stable.
+\end{frame}
+
+\begin{frame}{Résultats TinyImageNet}
+SAP maintient bonnes performances malgré compression.
+\end{frame}
+
+\begin{frame}{Ablation study}
+Impact de $p, q, \gamma, \eta_r$ sur pruning et performance.
+\end{frame}
+
+\begin{frame}{Comparaison PQI/Gini}
+\begin{itemize}
+\item Alignement des résultats
+\item PQI plus flexible et norm-based
+\end{itemize}
+\end{frame}
+
+% --- Conclusion ---
+\begin{frame}{Conclusion}
+\begin{itemize}
+\item PQI = nouvelle mesure robuste
+\item SAP = pruning adaptatif supérieur
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Perspectives}
+\begin{itemize}
+\item Théorie (borne sup)
+\item Applications hors IA (économie, équité)
+\item Optimisation jointe (PQI + loss)
+\end{itemize}
+\end{frame}
+
+\end{document}
